@@ -1,8 +1,16 @@
 #!/bin/bash
-root_dir=$(cd `dirname $0`/.. && pwd -P)
+echo "sync nwjs src files"
+rsync -avzh --exclude="out/" --exclude="*.git*" --delete  /media/dataj/jianjia_nwjs55  /media/dataj/jianjia_nwjs55_nodebug
+echo "build nwjs without debug"
+cd /media/dataj/jianjia_nwjs55_nodebug/jianjia_nwjs55/src
+ninja -C out/nw nwjs
+ninja -C out/Release node
+ninja -C out/nw copy_node
+root_dir="/media/dataj/wechat-devtools-linux/wechat-web-devtools-linux-nodebug"
 echo $root_dir
-nw_dir="/media/dataj/jianjia_nwjs55/src/out/nw"
+nw_dir="/media/dataj/jianjia_nwjs55_nodebug/jianjia_nwjs55/src/out/nw"
+echo "sync nwjs bin to wechat"
+rsync -avzh $nw_dir/{nacl_helper,nacl_helper_bootstrap,crashpad_handler,nacl_irt_x86_64.nexe,pnacl,icudtl.dat,resources.pak,swiftshader,locales,nw_100_percent.pak,nw_200_percent.pak,nw,lib,v8_context_snapshot.bin} $root_dir/nwjs/
+# cp  -r "$nw_dir/lib" "$root_dir/nwjs/"
+# cp "$nw_dir/v8_context_snapshot.bin" "$root_dir/nwjs/."
 
-cp "$nw_dir/nw" "$root_dir/nwjs/nw"
-cp  -r "$nw_dir/lib" "$root_dir/nwjs/"
-cp "$nw_dir/v8_context_snapshot.bin" "$root_dir/nwjs/v8_context_snapshot.bin"
