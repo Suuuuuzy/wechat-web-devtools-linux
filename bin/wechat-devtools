@@ -16,9 +16,10 @@ else
 fi
 
 # 获取App名称
-APP_NAME=$( cat "$root_dir/package.nw/package.json" | grep -Eo 'name":".*","main' )
-APP_NAME=${APP_NAME//name\":\"/}
-APP_NAME=${APP_NAME//\",\"main/}
+APP_NAME=$( cat "$root_dir/package.nw/package.json" | grep -Eo 'name":\s".*",\s"main' )
+APP_NAME=${APP_NAME//name\": \"/}
+APP_NAME=${APP_NAME//\", \"main/}
+# echo $APP_NAME
 
 export WECHAT_DEVTOOLS_DIR="$root_dir/nwjs"
 export APPDATA="$DATA_DIR/$APP_NAME"
@@ -60,4 +61,5 @@ USERDATADIR="$APPDATA"
 
 # "$@"参数
 LANG=zh_CN.UTF-8
+# echo "$root_dir/nwjs/nw" $root_dir/package.nw $EXTENSION2 $INSPECTOR1 "$@"
 exec "$root_dir/nwjs/nw" $root_dir/package.nw $EXTENSION2 $INSPECTOR1 "$@"
